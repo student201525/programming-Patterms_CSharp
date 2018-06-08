@@ -1,35 +1,14 @@
-﻿namespace Patterns.Ex02
+namespace Patterns.Ex02
 {
-    public class VkUserService
+    public class VkUserService : AnyUserService<VkUser>
     {
-        /// <summary>
-        /// Этот метод содержить дублирование с TwitterUserService.GetUserInfo
-        /// необходимо избавиться от дублирования (см. задание)
-        /// </summary>
-        /// <param name="pageUrl"></param>
-        /// <returns></returns>
-        public UserInfo GetUserInfo(string pageUrl)
-        {
-            var userId = Parse(pageUrl);
-            UserInfo result = new UserInfo
-            {
-                Name = GetName(userId),
-                UserId = userId
-            };
-
-            VkUser[] users = GetFriendsById(result.UserId);
-            UserInfo[] friends = ConvertToUserInfo(users);
-            result.Friends = friends;
-            return result;
-        }
-
         /// <summary>
         /// Нет необходимости менять этот метод, достаточно просто переиспользовать
         /// Реализация его не важна, стоит полагаться только на его внешний интерфейс
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
-        private string GetName(string userId)
+        protected override string GetName(string userId)
         {
             return "NAME";
         }
@@ -40,7 +19,7 @@
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
-        private VkUser[] GetFriendsById(string userId)
+        protected override VkUser[] GetFriendsById(string userId)
         {
             return new VkUser[0];
         }
@@ -51,7 +30,7 @@
         /// </summary>
         /// <param name="pageUrl"></param>
         /// <returns></returns>
-        private string Parse(string pageUrl)
+        protected override string Parse(string pageUrl)
         {
             return "USER_ID";
         }
@@ -63,7 +42,7 @@
         /// </summary>
         /// <param name="friends"></param>
         /// <returns></returns>
-        private UserInfo[] ConvertToUserInfo(VkUser[] friends)
+        protected override UserInfo[] ConvertToUserInfo(VkUser[] friends)
         {
             return new UserInfo[0];
         }
