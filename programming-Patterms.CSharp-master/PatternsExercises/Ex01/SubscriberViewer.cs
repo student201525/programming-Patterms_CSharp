@@ -7,8 +7,8 @@ namespace Patterns.Ex01
     public class SubscriberViewer
     {
         /// <summary>
-        /// Возвращает список подписчиков пользователя из соц.сети.
-        /// TODO: необходимо изменить этот метод по условиям задачи
+        /// Р’РѕР·РІСЂР°С‰Р°РµС‚ СЃРїРёСЃРѕРє РїРѕРґРїРёСЃС‡РёРєРѕРІ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ РёР· СЃРѕС†.СЃРµС‚Рё.
+        /// TODO: РЅРµРѕР±С…РѕРґРёРјРѕ РёР·РјРµРЅРёС‚СЊ СЌС‚РѕС‚ РјРµС‚РѕРґ РїРѕ СѓСЃР»РѕРІРёСЏРј Р·Р°РґР°С‡Рё
         /// </summary>
         /// <param name="userName"></param>
         /// <param name="networkType"></param>
@@ -23,7 +23,7 @@ namespace Patterns.Ex01
                 case SocialNetwork.Twitter:
                     
                     TwitterClient tClient = new TwitterClient();
-                    long idTClient = tClient.GetUserNameById(userName);
+                    long idTClient = tClient.GetUserIdName(userName);
                     return tClient;
                     
                 case SocialNetwork.Instagram:
@@ -35,7 +35,7 @@ namespace Patterns.Ex01
 
         public interface ILogic
         {
-            SocialNetworkUser[] GetSubscribers(userName);
+            SocialNetworkUser[] GetSubscribers(String userName);
         }
 
 
