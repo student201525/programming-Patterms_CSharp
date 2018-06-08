@@ -1,11 +1,11 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Patterns.Ex01.ExternalLibs.Twitter;
 
 namespace Patterns.Ex02
 {
-    public class TwitterUserService
+    public class TwitterUserService : AnyUserService<TwitterUser>
     {
         readonly TwitterClient _client = new TwitterClient();
 
@@ -15,36 +15,37 @@ namespace Patterns.Ex02
         /// </summary>
         /// <param name="pageUrl"></param>
         /// <returns></returns>
-        public UserInfo GetUserInfo(String pageUrl)
+        protected override string Parse(String pageUrl)
         {
             var regex = new Regex("twitter.com/(.*)");
             var userName = regex.Match(pageUrl).Groups[0].Value;
-
-            var userId = GetUserId(userName);
-
-            TwitterUser[] subscribers = _client.GetSubscribers(userId);
-
-            UserInfo[] friends = subscribers
-                .Select(c =>
-                {
-                    UserInfo userInfo = new UserInfo
-                    {
-                        UserId = c.UserId.ToString(),
-                        Name = _client.GetUserNameById(c.UserId)
-                    };
-                    return userInfo;
-                })
-                .ToArray();
-
-            var result = new UserInfo
-            {
-                Name = userName,
-                UserId = userId.ToString(),
-                Friends = friends
-            };
-            return result;
+            var userId = GetUserId(userName).ToString();
+            return userId;
         }
 
+        protected override UserInfo[]ConvertToUserInfo(TwitterUser[] user)
+        {
+            return user.Select(c =>
+            {
+                var userInfo = new UserInfo
+                {
+                    UserId = c.UserId.ToString(),
+                    Name = _client.GetUserNameById(c.UserId)
+                };
+                return userInfo;
+            })
+            .ToArray();
+        }
+        
+        protected override TwitterUser[] GetFriendsById(string userId)
+        {
+            return _client.GetSubscribers(Convert.ToInt64(userId)).ToArray();
+        }
+
+        protected override string GetName(string userId)
+        {
+            throw new NotImplementedException();
+        }
         /// <summary>
         /// Нет необходимости менять этот метод, достаточно просто переиспользовать
         /// Реализация его не важна, стоит полагаться только на его внешний интерфейс
